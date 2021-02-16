@@ -1,5 +1,4 @@
 #define GL_SILENCE_DEPRECATION
-#include<GL/glew.h>
 #include<GLUT/glut.h>
 #include<iostream>
 
@@ -15,14 +14,6 @@ int main(int args, char** argv)
     glutInitWindowSize(800, 600);
     glutCreateWindow("Pong");
 
-    GLenum err = glewInit();
-    if(GLEW_OK != err)
-    {
-        /* Problem: glewInit failed, something is seriously wrong. */
-        fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
-    }
-
-    fprintf(stdout, "Status: Using GLEW %s\n", glewGetString(GLEW_VERSION));
     fprintf(stdout, "The GLUT_WINDOW_WIDTH is %d\nand the GLUT_WINDOW_HEIGHT is %d\n", glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
     glutDisplayFunc(display);
     glutMainLoop();
