@@ -7,6 +7,9 @@ Rect::Rect()
     this->_z = 0;
     this->_dimension[0] = 1;
     this->_dimension[1] = 1;
+    this->_color[0] = 255;
+    this->_color[1] = 255;
+    this->_color[2] = 255;
     this->_speed = 0;
 }
 
@@ -17,6 +20,9 @@ Rect::Rect(float x, float y, float z, int dimension[], float speed)
     this->_z = z;
     this->_dimension[0] = dimension[0];
     this->_dimension[1] = dimension[1];
+    this->_color[0] = 255;
+    this->_color[1] = 255;
+    this->_color[2] = 255;
     this->_speed = speed;
 }
 
@@ -49,6 +55,13 @@ void Rect::SetDimension(int w, int h)
     this->_dimension[1] = h;
 }
 
+void Rect::SetColor(int r, int g, int b)
+{
+    this->_color[0] = r;
+    this->_color[1] = g;
+    this->_color[2] = b;
+}
+
 float Rect::GetX()
 {
     return this->_x;
@@ -79,7 +92,7 @@ void Rect::Draw()
     glPushMatrix();
     Calculate();
     glBegin(GL_QUADS);
-    glColor3f(255, 0, 255);
+    glColor3f(this->_color[0], this->_color[1], this->_color[2]);
     glVertex2f(this->_dimension[0]/-2.0f, this->_dimension[1]/-2.0f);
     glVertex2f(this->_dimension[0]/2.0f, this->_dimension[1]/-2.0f);
     glVertex2f(this->_dimension[0]/2.0f, this->_dimension[1]/2.0f);
