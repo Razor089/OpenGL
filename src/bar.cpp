@@ -79,7 +79,7 @@ void Bar::Draw()
     glPushMatrix();
     Calculate();
     glBegin(GL_QUADS);
-    glColor3f(1, 0, 0);
+    glColor3f(255, 0, 255);
     glVertex2f(this->_dimension[0]/-2.0f, this->_dimension[1]/-2.0f);
     glVertex2f(this->_dimension[0]/2.0f, this->_dimension[1]/-2.0f);
     glVertex2f(this->_dimension[0]/2.0f, this->_dimension[1]/2.0f);

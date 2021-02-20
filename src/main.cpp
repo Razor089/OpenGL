@@ -1,4 +1,5 @@
 #define GL_SILENCE_DEPRECATION
+#include<OpenGL/gl.h>
 #include<GLUT/glut.h>
 #include<OpenGL/glu.h>
 #include<iostream>
@@ -16,15 +17,17 @@ Bar *player;
 int main(int args, char** argv)
 {
     glutInit(&args, argv);
-    glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE|GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_RGBA|GLUT_DOUBLE);
     glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH)/2)-400, (glutGet(GLUT_SCREEN_HEIGHT)/2)-300);
-    glutInitWindowSize(800, 600);
+    glutInitWindowSize(600, 600);
     glutCreateWindow("Pong");
-    init();
 
     fprintf(stdout, "The GLUT_WINDOW_WIDTH is %d\nand the GLUT_WINDOW_HEIGHT is %d\n", glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
+
+    init();
+
     glutMainLoop();
 
     return 0;
@@ -32,32 +35,29 @@ int main(int args, char** argv)
 
 void init()
 {   
+    glClearColor(0.0, 0.0, 0.0, 1.0);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-100, 100, -100, 100);
     int dim[2];
-    dim[0] = 200;
-    dim[1] = 30;
-    player = new Bar(400, 30, 0, dim, 0);
+    dim[0] = 20;
+    dim[1] = 5;
+    player = new Bar(0, 0, 0, dim, 0);
 }
 
 void reshape(int w, int h)
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    glViewport(0, 0, (GLsizei)600, (GLsizei)600);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(0, 800, 600, 0, -10, 10);
+    gluOrtho2D(-100, 100, -100, 100);
     glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 }
 
 void display()
 {
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glViewport(0, 0, (GLsizei)800, (GLsizei)600);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(0, 800, 600, 0, -10, 10);
-    glMatrixMode(GL_MODELVIEW);
+    glClear(GL_COLOR_BUFFER_BIT);
 
     player->Draw();
 
