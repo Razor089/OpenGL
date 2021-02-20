@@ -1,13 +1,15 @@
 #ifndef RECT_H
 #define RECT_H
 #include<OpenGL/gl.h>
+
+/// Classe che disegna un rettangolo
 class Rect
 {
     private:
         float _x, _y, _z;
-        int color[];
         float _speed;
-        int _dimension[];
+        int _color[3];
+        int _dimension[2];
         
     public:
         /// Crea un oggetto rettangolo

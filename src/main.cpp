@@ -4,6 +4,7 @@
 #include<OpenGL/glu.h>
 #include<iostream>
 #include"Rect.h"
+#include"Line.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ void init();
 //Objects
 
 Rect *player, *ai;
+Line *separator;
 
 /// Main
 int main(int args, char** argv)
@@ -44,11 +46,16 @@ void init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
+
     int dim[2];
-    dim[0] = 20;
+    dim[0] = 30;
     dim[1] = 5;
-    player = new Rect(0, -99, 0, dim, 0);
-    ai = new Rect(0, 99, 0, dim, 0);
+    player = new Rect(0, -90, 0, dim, 0);
+    ai = new Rect(0, 90, 0, dim, 0);
+
+    separator = new Line();
+    separator->SetPosition(0,0,0);
+    separator->SetLength(198);
 }
 
 /// Metodo che governa il ridimensionamento della finestra
@@ -67,6 +74,7 @@ void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    separator->Draw();
     ai->Draw();
     player->Draw();
 
