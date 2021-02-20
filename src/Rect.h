@@ -1,7 +1,7 @@
-#ifndef BAR_H
-#define BAR_H
+#ifndef RECT_H
+#define RECT_H
 #include<OpenGL/gl.h>
-class Bar
+class Rect
 {
     private:
         float _x, _y, _z;
@@ -9,9 +9,9 @@ class Bar
         int _dimension[];
         
     public:
-        Bar();
-        Bar(float x, float y, float z, int dimension[], float speed);
-        ~Bar();
+        Rect();
+        Rect(float x, float y, float z, int dimension[], float speed);
+        ~Rect();
         void SetX(float x);
         void SetY(float y);
         void SetZ(float z);

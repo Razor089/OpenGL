@@ -1,6 +1,6 @@
-#include"bar.h"
+#include"Rect.h"
 
-Bar::Bar()
+Rect::Rect()
 {
     this->_x = 0;
     this->_y = 0;
@@ -10,7 +10,7 @@ Bar::Bar()
     this->_speed = 0;
 }
 
-Bar::Bar(float x, float y, float z, int dimension[], float speed)
+Rect::Rect(float x, float y, float z, int dimension[], float speed)
 {
     this->_x = x;
     this->_y = y;
@@ -20,61 +20,61 @@ Bar::Bar(float x, float y, float z, int dimension[], float speed)
     this->_speed = speed;
 }
 
-Bar::~Bar() {}
+Rect::~Rect() {}
 
-void Bar::SetX(float x)
+void Rect::SetX(float x)
 {
     this->_x = x;
 }
 
-void Bar::SetY(float y)
+void Rect::SetY(float y)
 {
     this->_y = y;
 }
 
-void Bar::SetZ(float z)
+void Rect::SetZ(float z)
 {
     this->_z = z;
 }
 
-void Bar::SetSpeed(float speed)
+void Rect::SetSpeed(float speed)
 {
     this->_speed = speed;
 }
 
-void Bar::SetDimension(int w, int h)
+void Rect::SetDimension(int w, int h)
 {
     //this->_dimension = new[2];
     this->_dimension[0] = w;
     this->_dimension[1] = h;
 }
 
-float Bar::GetX()
+float Rect::GetX()
 {
     return this->_x;
 }
 
-float Bar::GetY()
+float Rect::GetY()
 {
     return this->_y;
 }
 
-float Bar::GetZ()
+float Rect::GetZ()
 {
     return this->_z;
 }
 
-float Bar::GetSpeed()
+float Rect::GetSpeed()
 {
     return this->_speed;
 }
 
-void Bar::Calculate()
+void Rect::Calculate()
 {
     glTranslatef(this->_x, this->_y, 0);
 }
 
-void Bar::Draw()
+void Rect::Draw()
 {
     glPushMatrix();
     Calculate();
