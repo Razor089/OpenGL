@@ -3,7 +3,7 @@
 #include<GLUT/glut.h>
 #include<OpenGL/glu.h>
 #include<iostream>
-#include"Bar.h"
+#include"Rect.h"
 
 using namespace std;
 
@@ -12,7 +12,7 @@ void reshape(int w, int h);
 void init();
 
 //Objects
-Bar *player;
+Rect *player;
 
 int main(int args, char** argv)
 {
@@ -42,7 +42,7 @@ void init()
     int dim[2];
     dim[0] = 20;
     dim[1] = 5;
-    player = new Bar(0, 0, 0, dim, 0);
+    player = new Rect(0, -99, 0, dim, 0);
 }
 
 void reshape(int w, int h)
