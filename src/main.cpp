@@ -47,11 +47,12 @@ void init()
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
 
-    int dim[2];
-    dim[0] = 30;
-    dim[1] = 5;
-    player = new Rect(0, -90, 0, dim, 0);
-    ai = new Rect(0, 90, 0, dim, 0);
+    player = new Rect();
+    player->SetDimension(30, 5);
+    player->SetPosition(0, -90, 0);
+    ai = new Rect();
+    ai->SetDimension(30, 5);
+    ai->SetPosition(0, 90, 0);
 
     separator = new Line();
     separator->SetPosition(0,0,0);
