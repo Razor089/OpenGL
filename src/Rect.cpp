@@ -1,10 +1,14 @@
 #include"Rect.h"
 
+const int Rect::X_AXIS = 0;
+const int Rect::Y_AXIS = 1;
+const int Rect::Z_AXIS = 2;
+
 Rect::Rect()
 {
-    this->_x = 0;
-    this->_y = 0;
-    this->_z = 0;
+    this->_position[Rect::X_AXIS] = 0;
+    this->_position[Rect::Y_AXIS] = 0;
+    this->_position[Rect::Z_AXIS] = 0;
     this->_dimension[0] = 1;
     this->_dimension[1] = 1;
     this->_color[0] = 255;
@@ -13,11 +17,11 @@ Rect::Rect()
     this->_speed = 0;
 }
 
-Rect::Rect(float x, float y, float z, int dimension[], float speed)
+Rect::Rect(float position[3], int dimension[2], float speed)
 {
-    this->_x = x;
-    this->_y = y;
-    this->_z = z;
+    this->_position[Rect::X_AXIS] = position[0];
+    this->_position[Rect::Y_AXIS] = position[1];
+    this->_position[Rect::Z_AXIS] = position[2];
     this->_dimension[0] = dimension[0];
     this->_dimension[1] = dimension[1];
     this->_color[0] = 255;
@@ -30,17 +34,17 @@ Rect::~Rect() {}
 
 void Rect::SetX(float x)
 {
-    this->_x = x;
+    this->_position[Rect::X_AXIS] = x;
 }
 
 void Rect::SetY(float y)
 {
-    this->_y = y;
+    this->_position[Rect::Y_AXIS] = y;
 }
 
 void Rect::SetZ(float z)
 {
-    this->_z = z;
+    this->_position[Rect::Z_AXIS] = z;
 }
 
 void Rect::SetSpeed(float speed)
@@ -50,7 +54,6 @@ void Rect::SetSpeed(float speed)
 
 void Rect::SetDimension(int w, int h)
 {
-    //this->_dimension = new[2];
     this->_dimension[0] = w;
     this->_dimension[1] = h;
 }
@@ -62,19 +65,31 @@ void Rect::SetColor(int r, int g, int b)
     this->_color[2] = b;
 }
 
-float Rect::GetX()
+void Rect::SetPosition(float x, float y, float z)
 {
-    return this->_x;
+    this->_position[Rect::X_AXIS] = x;
+    this->_position[Rect::Y_AXIS] = y;
+    this->_position[Rect::Z_AXIS] = z;
 }
 
-float Rect::GetY()
+float* Rect::GetPosition()
 {
-    return this->_y;
+    return this->_position;
 }
 
-float Rect::GetZ()
+float Rect::GetPosition(int axis)
 {
-    return this->_z;
+    switch (axis)
+    {
+    case 0:
+        return this->_position[Rect::X_AXIS];
+    case 1:
+        return this->_position[Rect::Y_AXIS];
+    case 2:
+        return this->_position[Rect::Z_AXIS];
+    default:
+        return -1;
+    }
 }
 
 float Rect::GetSpeed()
@@ -84,7 +99,7 @@ float Rect::GetSpeed()
 
 void Rect::Calculate()
 {
-    glTranslatef(this->_x, this->_y, 0);
+    glTranslatef(this->_position[Rect::X_AXIS], this->_position[Rect::Y_AXIS], this->_position[Rect::Z_AXIS]);
 }
 
 void Rect::Draw()

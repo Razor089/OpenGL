@@ -6,17 +6,33 @@
 class Rect
 {
     private:
-        float _x, _y, _z;
+        float _position[3];
         float _speed;
         int _color[3];
         int _dimension[2];
         
     public:
+
+        /// Costanti
+
+        static const int X_AXIS;
+        static const int Y_AXIS;
+        static const int Z_AXIS;
+
         /// Crea un oggetto rettangolo
         Rect();
 
         /// Crea un oggetto rettangolo con parametri
-        Rect(float x, float y, float z, int dimension[], float speed);
+        Rect(float position[3], int dimension[2], float speed);
+
+        /// Imposta la posizione sugli assi
+        void SetPosition(float x, float y, float z);
+
+        /// Ritorna il vettore posizione
+        float* GetPosition();
+
+        /// Ritorna la posizione sull'asse selezionato
+        float GetPosition(int axis);
 
         /// Distruttore
         ~Rect();
@@ -49,15 +65,6 @@ class Rect
         
         /// Metodo che disegna il rettangolo a schermo
         void Draw();
-        
-        /// Ritorna la posizione sull'asse X
-        float GetX();
-        
-        /// Ritorna la posizione sull'asse Y
-        float GetY();
-        
-        /// Ritorna la posizione sull'asse Z
-        float GetZ();
         
         /// Ritorna la velocità
         float GetSpeed();
