@@ -5,6 +5,7 @@
 #include<iostream>
 #include"Rect.h"
 #include"Line.h"
+#include"utility/utility.h"
 
 using namespace std;
 
@@ -16,7 +17,7 @@ void init();
 
 //Objects
 
-Rect *player, *ai;
+Rect *player, *ai, *ball;
 Line *separator;
 
 /// Main
@@ -50,9 +51,14 @@ void init()
     player = new Rect();
     player->SetDimension(30, 5);
     player->SetPosition(0, -90, 0);
+
     ai = new Rect();
     ai->SetDimension(30, 5);
     ai->SetPosition(0, 90, 0);
+
+    ball = new Rect();
+    ball->SetDimension(5,5);
+    ball->SetPosition(0, 0, 0);
 
     separator = new Line();
     separator->SetPosition(0,0,0);
@@ -74,16 +80,12 @@ void reshape(int w, int h)
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-
+    Utility::printw(-90, 87, 0, "Player 1");
+    Utility::printw(55, 87, 0, "Player 2");
     separator->Draw();
     ai->Draw();
     player->Draw();
+    ball->Draw();
 
     glutSwapBuffers();
-}
-
-/// Metodo che permette di stampare a schermo
-void printw(float x, float y, float z, char* format, ...)
-{
-    
 }

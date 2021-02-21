@@ -34,17 +34,17 @@ Rect::~Rect() {}
 
 void Rect::SetX(float x)
 {
-    this->_x = x;
+    this->_position[Rect::X_AXIS] = x;
 }
 
 void Rect::SetY(float y)
 {
-    this->_y = y;
+    this->_position[Rect::Y_AXIS] = y;
 }
 
 void Rect::SetZ(float z)
 {
-    this->_z = z;
+    this->_position[Rect::Z_AXIS] = z;
 }
 
 void Rect::SetSpeed(float speed)
