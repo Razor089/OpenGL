@@ -10,9 +10,16 @@ class Utility
 {
     private:
         static int _vscprintf(const char * format, va_list pargs);
+        static int oldTimeSinceStart;
     public:
+        /// Variabili
+        static int deltaTime;
+
         /// Metodo che permette di stampare a schermo
         static void printw(float x, float y, float z, char* format, ...);
+
+        /// Metodo per il calcolo del DeltaTime
+        static void calcDeltaTime();
 };
 
 #endif

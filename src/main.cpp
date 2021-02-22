@@ -14,11 +14,17 @@ using namespace std;
 void display();
 void reshape(int w, int h);
 void init();
+void idle();
 
 //Objects
 
 Rect *player, *ai, *ball;
 Line *separator;
+
+/// Game Variables
+int player_score, ia_score;
+
+/// Utility Variables
 
 /// Main
 int main(int args, char** argv)
@@ -29,15 +35,24 @@ int main(int args, char** argv)
     glutInitWindowSize(600, 600);
     glutCreateWindow("Pong");
 
+    init();
+
     fprintf(stdout, "The GLUT_WINDOW_WIDTH is %d\nand the GLUT_WINDOW_HEIGHT is %d\n", glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
-
-    init();
+    glutIdleFunc(idle);
 
     glutMainLoop();
 
     return 0;
+}
+
+/// Idle Function
+void idle()
+{
+    Utility::calcDeltaTime();
+
+    glutPostRedisplay();
 }
 
 /// Inizializzazione delle variabili e dello stato di OpenGL
@@ -47,6 +62,9 @@ void init()
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
+
+    player_score = 0;
+    ia_score = 0;
 
     player = new Rect();
     player->SetDimension(30, 5);
@@ -80,12 +98,19 @@ void reshape(int w, int h)
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    Utility::printw(-90, 87, 0, "Player 1");
-    Utility::printw(55, 87, 0, "Player 2");
+
+    Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
+    Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
+
     separator->Draw();
     ai->Draw();
     player->Draw();
     ball->Draw();
 
     glutSwapBuffers();
+}
+
+void keyboard()
+{
+
 }
