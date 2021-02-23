@@ -13,12 +13,20 @@ using namespace std;
 
 void display();
 void reshape(int w, int h);
+void keyboardDown(unsigned char key, int x, int y);
+void keyboardUp(unsigned char key, int x, int y);
 void init();
+void idle();
 
 //Objects
 
 Rect *player, *ai, *ball;
 Line *separator;
+
+/// Game Variables
+int player_score, ia_score;
+
+/// Utility Variables
 
 /// Main
 int main(int args, char** argv)
@@ -29,15 +37,28 @@ int main(int args, char** argv)
     glutInitWindowSize(600, 600);
     glutCreateWindow("Pong");
 
+    init();
+
     fprintf(stdout, "The GLUT_WINDOW_WIDTH is %d\nand the GLUT_WINDOW_HEIGHT is %d\n", glutGet(GLUT_SCREEN_WIDTH), glutGet(GLUT_SCREEN_HEIGHT));
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
-
-    init();
+    glutIdleFunc(idle);
+    glutKeyboardUpFunc(keyboardUp);
+    glutKeyboardFunc(keyboardDown);
 
     glutMainLoop();
 
     return 0;
+}
+
+/// Idle Function
+void idle()
+{
+    Utility::calcDeltaTime();
+    
+    player->Move();
+
+    glutPostRedisplay();
 }
 
 /// Inizializzazione delle variabili e dello stato di OpenGL
@@ -48,9 +69,13 @@ void init()
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
 
+    player_score = 0;
+    ia_score = 0;
+
     player = new Rect();
     player->SetDimension(30, 5);
     player->SetPosition(0, -90, 0);
+    player->SetSpeed(0.08);
 
     ai = new Rect();
     ai->SetDimension(30, 5);
@@ -80,12 +105,46 @@ void reshape(int w, int h)
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
-    Utility::printw(-90, 87, 0, "Player 1");
-    Utility::printw(55, 87, 0, "Player 2");
+
+    Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
+    Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
+
     separator->Draw();
     ai->Draw();
     player->Draw();
     ball->Draw();
 
     glutSwapBuffers();
+}
+
+/// Metodo che gestisce gli input da tastiera
+void keyboardDown(unsigned char key, int x, int y)
+{
+    switch(key)
+    {
+        case 'a':
+            player->LEFT = true;
+            break;
+        case 'd':
+            player->RIGHT = true;
+            break;
+        default:
+            break;
+    }
+}
+
+/// Metodo che gestisce gli input quando i tasti vengono rilasciati
+void keyboardUp(unsigned char key, int x, int y)
+{
+    switch(key)
+    {
+        case 'a':
+            player->LEFT = false;
+            break;
+        case 'd':
+            player->RIGHT = false;
+            break;
+        default:
+            break;
+    }
 }

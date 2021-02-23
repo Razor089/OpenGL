@@ -1,6 +1,7 @@
 #ifndef RECT_H
 #define RECT_H
 #include<OpenGL/gl.h>
+#include"utility/utility.h" 
 
 /// Classe che disegna un rettangolo
 class Rect
@@ -18,6 +19,12 @@ class Rect
         static const int X_AXIS;
         static const int Y_AXIS;
         static const int Z_AXIS;
+
+        /// Variabili
+        bool UP;
+        bool DOWN;
+        bool LEFT;
+        bool RIGHT;
 
         /// Crea un oggetto rettangolo
         Rect();
@@ -48,6 +55,9 @@ class Rect
 
         ///Metodo che imposta la velocità
         void SetSpeed(float speed);
+        
+        /// Metodo che sposta il rettangolo
+        void Move();
 
         /// Imposta le dimensioni del rettangolo
         /// int w = larghezza

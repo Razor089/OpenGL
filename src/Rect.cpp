@@ -15,6 +15,10 @@ Rect::Rect()
     this->_color[1] = 255;
     this->_color[2] = 255;
     this->_speed = 0;
+    this->UP = false;
+    this->DOWN = false;
+    this->RIGHT = false;
+    this->LEFT = false;
 }
 
 Rect::Rect(float position[3], int dimension[2], float speed)
@@ -28,6 +32,10 @@ Rect::Rect(float position[3], int dimension[2], float speed)
     this->_color[1] = 255;
     this->_color[2] = 255;
     this->_speed = speed;
+    this->UP = false;
+    this->DOWN = false;
+    this->LEFT = false;
+    this->RIGHT = false;
 }
 
 Rect::~Rect() {}
@@ -95,6 +103,34 @@ float Rect::GetPosition(int axis)
 float Rect::GetSpeed()
 {
     return this->_speed;
+}
+
+void Rect::Move()
+{
+    if(UP)
+    {
+        this->_position[Rect::Y_AXIS] += this->_speed * Utility::deltaTime;
+    }
+    if(DOWN)
+    {
+        this->_position[Rect::Y_AXIS] += -this->_speed * Utility::deltaTime;
+    }
+    if(LEFT)
+    {
+        this->_position[Rect::X_AXIS] += -this->_speed * Utility::deltaTime;
+        if(this->_position[Rect::X_AXIS]-(this->_dimension[0]/2) < -99)
+        {
+            this->_position[Rect::X_AXIS] = -99+(this->_dimension[0]/2);
+        }
+    }
+    if(RIGHT)
+    {
+        this->_position[Rect::X_AXIS] += this->_speed * Utility::deltaTime;
+        if(this->_position[Rect::X_AXIS]+(this->_dimension[0]/2) > 99)
+        {
+            this->_position[Rect::X_AXIS] = 99-(this->_dimension[0]/2);
+        }
+    }
 }
 
 void Rect::Calculate()

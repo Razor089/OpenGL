@@ -1,5 +1,15 @@
 #include "utility.h"
 
+int Utility::oldTimeSinceStart = 0;
+int Utility::deltaTime = 0;
+
+void Utility::calcDeltaTime()
+{
+    int timeSinceStart = glutGet(GLUT_ELAPSED_TIME);
+    deltaTime = timeSinceStart - oldTimeSinceStart;
+    oldTimeSinceStart = timeSinceStart;
+}
+
 int Utility::_vscprintf(const char * format, va_list pargs)
 {
     int retval; 
@@ -37,7 +47,7 @@ void Utility::printw(float x, float y, float z, char* format, ...)
     /// Disegniamo uno a uno i caratteri
     for(i = 0; text[i] != '\0'; i++)
     {
-        glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, text[i]);
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, text[i]);
     }
 
     free(text);
