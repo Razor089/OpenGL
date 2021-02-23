@@ -3,6 +3,8 @@
 const int Rect::X_AXIS = 0;
 const int Rect::Y_AXIS = 1;
 const int Rect::Z_AXIS = 2;
+const int Rect::WIDTH = 0;
+const int Rect::HEIGHT = 1;
 
 Rect::Rect()
 {
@@ -131,6 +133,19 @@ void Rect::Move()
             this->_position[Rect::X_AXIS] = 99-(this->_dimension[0]/2);
         }
     }
+}
+
+float Rect::GetDimension(int cmp)
+{
+   if(cmp == 0)
+   {
+      return this->_dimension[0];
+   }
+   else if(cmp == 1)
+   {
+      return this->_dimension[1];
+   }
+   return -1;
 }
 
 void Rect::Calculate()

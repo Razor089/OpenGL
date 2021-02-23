@@ -19,6 +19,8 @@ class Rect
         static const int X_AXIS;
         static const int Y_AXIS;
         static const int Z_AXIS;
+        static const int WIDTH;
+        static const int HEIGHT;
 
         /// Variabili
         bool UP;
@@ -78,6 +80,9 @@ class Rect
         
         /// Ritorna la velocità
         float GetSpeed();
+
+        /// Ritorna le dimensioni
+        float GetDimension(int cmp);
 };
 
 #endif

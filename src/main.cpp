@@ -71,6 +71,9 @@ void idle()
         {
             flag = false;
             printf("Lancio Palla!");
+            int dim = ball->GetDimension(Rect::WIDTH);
+            ball->SetPosition(Utility::RandomInt(+90-(dim/2), -90+(dim/2)), 0, 0);
+            start = true;
         }
     }
 
@@ -105,7 +108,7 @@ void init()
 
     ball = new Rect();
     ball->SetDimension(5,5);
-    ball->SetPosition(0, 0, 0);
+    //ball->SetPosition(0, 0, 0);
 
     separator = new Line();
     separator->SetPosition(0,0,0);
@@ -128,7 +131,7 @@ void message()
 {
     Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
     Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
-    if(!start)
+    if(!flag)
     {
         Utility::printw(-30, 5, 0, "Press 'ENTER' to play");
     }
@@ -144,7 +147,11 @@ void display()
     separator->Draw();
     ai->Draw();
     player->Draw();
-    ball->Draw();
+    
+    if(start)
+    {
+        ball->Draw();
+    }
 
     glutSwapBuffers();
 }
@@ -161,7 +168,6 @@ void keyboardDown(unsigned char key, int x, int y)
             player->RIGHT = true;
             break;
         case ENTER:
-	    start = true;
             flag = true;
             oldTime = glutGet(GLUT_ELAPSED_TIME);
             break;
