@@ -17,6 +17,7 @@ void keyboardDown(unsigned char key, int x, int y);
 void keyboardUp(unsigned char key, int x, int y);
 void init();
 void idle();
+void message();
 
 //Objects
 
@@ -27,6 +28,12 @@ Line *separator;
 int player_score, ia_score;
 
 /// Utility Variables
+#define ENTER 13
+#define SPACE 32
+#define ESC 27
+bool start;
+bool flag;
+int oldTime;
 
 /// Main
 int main(int args, char** argv)
@@ -56,6 +63,17 @@ void idle()
 {
     Utility::calcDeltaTime();
     
+    /// Quando premiamo ENTER parte il timer, passati i due secondi lancia la palla
+    if(flag)
+    {
+        int time = glutGet(GLUT_ELAPSED_TIME);
+        if((time-oldTime)/2000 == 1)
+        {
+            flag = false;
+            printf("Lancio Palla!");
+        }
+    }
+
     player->Move();
 
     glutPostRedisplay();
@@ -69,9 +87,13 @@ void init()
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
 
+    /// Inizializzazione delle variabili di gioco
     player_score = 0;
     ia_score = 0;
+    start = false;
+    flag = false;
 
+    /// Inizializzazione del giocatore e dell'avversario
     player = new Rect();
     player->SetDimension(32, 5);
     player->SetPosition(0, -90, 0);
@@ -101,13 +123,23 @@ void reshape(int w, int h)
     glLoadIdentity();
 }
 
+/// Metodo che contiene tutti i messaggi a schermo
+void message()
+{
+    Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
+    Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
+    if(!start)
+    {
+        Utility::printw(-30, 5, 0, "Press 'ENTER' to play");
+    }
+}
+
 /// Metodo dove si disegna tutto sullo schermo
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
-    Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
+    message();
 
     separator->Draw();
     ai->Draw();
@@ -127,6 +159,11 @@ void keyboardDown(unsigned char key, int x, int y)
             break;
         case 'd':
             player->RIGHT = true;
+            break;
+        case ENTER:
+	    start = true;
+            flag = true;
+            oldTime = glutGet(GLUT_ELAPSED_TIME);
             break;
         default:
             break;

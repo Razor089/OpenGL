@@ -52,3 +52,9 @@ void Utility::printw(float x, float y, float z, char* format, ...)
 
     free(text);
 }
+
+int Utility::RandomInt(int a, int b)
+{
+    srand(time(NULL));
+    return rand() % a + b;
+}

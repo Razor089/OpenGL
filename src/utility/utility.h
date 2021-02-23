@@ -3,6 +3,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<stdarg.h>
+#include<ctime>
 #include<OpenGL/gl.h>
 #include<GLUT/glut.h>
 /// Classe con metodi statici di utilita§
@@ -20,6 +21,9 @@ class Utility
 
         /// Metodo per il calcolo del DeltaTime
         static void calcDeltaTime();
+
+        /// Metodo che genera un numero intero casuale nell'intervallo [a,b]
+        static int RandomInt(int a, int b);
 };
 
 #endif
