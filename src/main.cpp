@@ -73,12 +73,12 @@ void init()
     ia_score = 0;
 
     player = new Rect();
-    player->SetDimension(30, 5);
+    player->SetDimension(32, 5);
     player->SetPosition(0, -90, 0);
     player->SetSpeed(0.08);
 
     ai = new Rect();
-    ai->SetDimension(30, 5);
+    ai->SetDimension(32, 5);
     ai->SetPosition(0, 90, 0);
 
     ball = new Rect();
