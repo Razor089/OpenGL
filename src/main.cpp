@@ -13,6 +13,8 @@ using namespace std;
 
 void display();
 void reshape(int w, int h);
+void keyboardDown(unsigned char key, int x, int y);
+void keyboardUp(unsigned char key, int x, int y);
 void init();
 void idle();
 
@@ -41,6 +43,8 @@ int main(int args, char** argv)
     glutReshapeFunc(reshape);
     glutDisplayFunc(display);
     glutIdleFunc(idle);
+    glutKeyboardUpFunc(keyboardUp);
+    glutKeyboardFunc(keyboardDown);
 
     glutMainLoop();
 
@@ -51,6 +55,8 @@ int main(int args, char** argv)
 void idle()
 {
     Utility::calcDeltaTime();
+    
+    player->Move();
 
     glutPostRedisplay();
 }
@@ -69,6 +75,7 @@ void init()
     player = new Rect();
     player->SetDimension(30, 5);
     player->SetPosition(0, -90, 0);
+    player->SetSpeed(0.08);
 
     ai = new Rect();
     ai->SetDimension(30, 5);
@@ -110,7 +117,34 @@ void display()
     glutSwapBuffers();
 }
 
-void keyboard()
+/// Metodo che gestisce gli input da tastiera
+void keyboardDown(unsigned char key, int x, int y)
 {
+    switch(key)
+    {
+        case 'a':
+            player->LEFT = true;
+            break;
+        case 'd':
+            player->RIGHT = true;
+            break;
+        default:
+            break;
+    }
+}
 
+/// Metodo che gestisce gli input quando i tasti vengono rilasciati
+void keyboardUp(unsigned char key, int x, int y)
+{
+    switch(key)
+    {
+        case 'a':
+            player->LEFT = false;
+            break;
+        case 'd':
+            player->RIGHT = false;
+            break;
+        default:
+            break;
+    }
 }
