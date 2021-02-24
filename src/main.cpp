@@ -5,6 +5,7 @@
 #include<iostream>
 #include"Rect.h"
 #include"Line.h"
+#include"Ball.h"
 #include"utility/utility.h"
 
 using namespace std;
@@ -17,6 +18,7 @@ void keyboardDown(unsigned char key, int x, int y);
 void keyboardUp(unsigned char key, int x, int y);
 void init();
 void idle();
+void message();
 
 //Objects
 
@@ -27,6 +29,12 @@ Line *separator;
 int player_score, ia_score;
 
 /// Utility Variables
+#define ENTER 13
+#define SPACE 32
+#define ESC 27
+bool start;
+bool flag;
+int oldTime;
 
 /// Main
 int main(int args, char** argv)
@@ -56,7 +64,25 @@ void idle()
 {
     Utility::calcDeltaTime();
     
-    player->Move();
+    /// Quando premiamo ENTER parte il timer, passati i due secondi lancia la palla
+    if(flag)
+    {
+        int time = glutGet(GLUT_ELAPSED_TIME);
+        if((time-oldTime)/2000 == 1)
+        {
+            flag = false;
+            int dim = ball->GetDimension(Rect::WIDTH);
+            ball->SetPosition(Utility::RandomInt(-90+(dim/2), 90-(dim/2)), 0, 0);
+            start = true;
+        }
+    }
+
+    player->Move(-99, 99, 0, 0, 0, 0);
+
+    if(start)
+    {
+        //Move the ball
+    }
 
     glutPostRedisplay();
 }
@@ -69,21 +95,25 @@ void init()
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
 
+    /// Inizializzazione delle variabili di gioco
     player_score = 0;
     ia_score = 0;
+    start = false;
+    flag = false;
 
+    /// Inizializzazione del giocatore e dell'avversario
     player = new Rect();
-    player->SetDimension(30, 5);
+    player->SetDimension(32, 5);
     player->SetPosition(0, -90, 0);
     player->SetSpeed(0.08);
 
     ai = new Rect();
-    ai->SetDimension(30, 5);
+    ai->SetDimension(32, 5);
     ai->SetPosition(0, 90, 0);
 
-    ball = new Rect();
-    ball->SetDimension(5,5);
-    ball->SetPosition(0, 0, 0);
+    ball = new Ball();
+    ball->SetDimension(2,2);
+    ball->SetSpeed(0.05);
 
     separator = new Line();
     separator->SetPosition(0,0,0);
@@ -101,18 +131,32 @@ void reshape(int w, int h)
     glLoadIdentity();
 }
 
+/// Metodo che contiene tutti i messaggi a schermo
+void message()
+{
+    Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
+    Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
+    if(!flag && !start)
+    {
+        Utility::printw(-30, 5, 0, "Press 'ENTER' to play");
+    }
+}
+
 /// Metodo dove si disegna tutto sullo schermo
 void display()
 {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
-    Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
+    message();
 
     separator->Draw();
     ai->Draw();
     player->Draw();
-    ball->Draw();
+    
+    if(start)
+    {
+        ball->Draw();
+    }
 
     glutSwapBuffers();
 }
@@ -127,6 +171,10 @@ void keyboardDown(unsigned char key, int x, int y)
             break;
         case 'd':
             player->RIGHT = true;
+            break;
+        case ENTER:
+            flag = true;
+            oldTime = glutGet(GLUT_ELAPSED_TIME);
             break;
         default:
             break;

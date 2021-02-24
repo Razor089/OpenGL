@@ -6,7 +6,7 @@
 /// Classe che disegna un rettangolo
 class Rect
 {
-    private:
+    protected:
         float _position[3];
         float _speed;
         int _color[3];
@@ -19,6 +19,8 @@ class Rect
         static const int X_AXIS;
         static const int Y_AXIS;
         static const int Z_AXIS;
+        static const int WIDTH;
+        static const int HEIGHT;
 
         /// Variabili
         bool UP;
@@ -57,7 +59,10 @@ class Rect
         void SetSpeed(float speed);
         
         /// Metodo che sposta il rettangolo
-        void Move();
+        virtual void Move();
+
+        /// Metodo che sposta il rettangolo all'interno dei limiti
+        virtual void Move(int x_left, int x_right, int y_up, int y_bottom, int z_near, int z_far);
 
         /// Imposta le dimensioni del rettangolo
         /// int w = larghezza
@@ -78,6 +83,9 @@ class Rect
         
         /// Ritorna la velocità
         float GetSpeed();
+
+        /// Ritorna le dimensioni
+        float GetDimension(int cmp);
 };
 
 #endif

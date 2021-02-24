@@ -3,6 +3,8 @@
 const int Rect::X_AXIS = 0;
 const int Rect::Y_AXIS = 1;
 const int Rect::Z_AXIS = 2;
+const int Rect::WIDTH = 0;
+const int Rect::HEIGHT = 1;
 
 Rect::Rect()
 {
@@ -118,19 +120,60 @@ void Rect::Move()
     if(LEFT)
     {
         this->_position[Rect::X_AXIS] += -this->_speed * Utility::deltaTime;
-        if(this->_position[Rect::X_AXIS]-(this->_dimension[0]/2) < -99)
-        {
-            this->_position[Rect::X_AXIS] = -99+(this->_dimension[0]/2);
-        }
     }
     if(RIGHT)
     {
         this->_position[Rect::X_AXIS] += this->_speed * Utility::deltaTime;
-        if(this->_position[Rect::X_AXIS]+(this->_dimension[0]/2) > 99)
-        {
-            this->_position[Rect::X_AXIS] = 99-(this->_dimension[0]/2);
-        }
     }
+}
+
+void Rect::Move(int x_left, int x_right, int y_up, int y_bottom, int z_near, int z_far)
+{
+   if(LEFT)
+   {
+       this->_position[Rect::X_AXIS] += -this->_speed * Utility::deltaTime;
+       if(this->_position[Rect::X_AXIS]-(this->_dimension[0]/2) < x_left && x_left != 0)
+       {
+           this->_position[Rect::X_AXIS] = x_left+(this->_dimension[0]/2);
+       }
+   }
+   if(RIGHT)
+   {
+       this->_position[Rect::X_AXIS] += this->_speed * Utility::deltaTime;
+       if(this->_position[Rect::X_AXIS]+(this->_dimension[0]/2) > x_right && x_right != 0)
+       {
+           this->_position[Rect::X_AXIS] = x_right-(this->_dimension[0]/2);
+       }
+   }
+   if(UP)
+   {
+       this->_position[Rect::Y_AXIS] += this->_speed * Utility::deltaTime;
+       if(this->_position[Rect::Y_AXIS]+(this->_dimension[1]/2) > y_up && y_up != 0)
+       {
+           this->_position[Rect::Y_AXIS] = y_up-(this->_dimension[1]/2);
+       }
+   }
+   if(DOWN)
+   {
+       this->_position[Rect::Y_AXIS] += -this->_speed * Utility::deltaTime;
+       if(this->_position[Rect::Y_AXIS]-(this->_dimension[1]/2) < y_bottom && y_bottom != 0)
+       {
+           this->_position[Rect::Y_AXIS] = y_bottom+(this->_dimension[1]/2);
+       }
+   }
+}
+
+float Rect::GetDimension(int cmp)
+{
+   if(cmp == 0)
+   {
+      return this->_dimension[0];
+   }
+   else if(cmp == 1)
+   {
+      return this->_dimension[1];
+   }
+   return -1;
 }
 
 void Rect::Calculate()
