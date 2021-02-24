@@ -5,6 +5,7 @@
 class Ball: public Rect
 {
     public:
+
         /// Costruttore
         Ball();
         
@@ -12,7 +13,10 @@ class Ball: public Rect
         Ball(float position[3], int dimension[2], float speed);        
 
         /// Distruttore
-        ~Ball();    
+        ~Ball();
+
+        /// Metodo di movimento della palla
+        void Move(int number);    
 };
 
 #endif

@@ -29,3 +29,12 @@ Ball::Ball(float position[3], int dimension[2], float speed)
     this->LEFT = false;
     this->RIGHT = false;
 }
+
+void Ball::Move(int number)
+{
+    switch(number)
+    {
+        default:
+            break;
+    }
+}
