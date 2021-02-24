@@ -59,10 +59,10 @@ class Rect
         void SetSpeed(float speed);
         
         /// Metodo che sposta il rettangolo
-        void Move();
+        virtual void Move();
 
         /// Metodo che sposta il rettangolo all'interno dei limiti
-        void Move(int x_left, int x_right, int y_up, int y_bottom, int z_near, int z_far);
+        virtual void Move(int x_left, int x_right, int y_up, int y_bottom, int z_near, int z_far);
 
         /// Imposta le dimensioni del rettangolo
         /// int w = larghezza
