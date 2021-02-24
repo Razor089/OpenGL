@@ -5,6 +5,7 @@
 #include<iostream>
 #include"Rect.h"
 #include"Line.h"
+#include"Ball.h"
 #include"utility/utility.h"
 
 using namespace std;
@@ -70,14 +71,18 @@ void idle()
         if((time-oldTime)/2000 == 1)
         {
             flag = false;
-            printf("Lancio Palla!");
             int dim = ball->GetDimension(Rect::WIDTH);
             ball->SetPosition(Utility::RandomInt(-90+(dim/2), 90-(dim/2)), 0, 0);
             start = true;
         }
     }
 
-    player->Move();
+    player->Move(-99, 99, 0, 0, 0, 0);
+
+    if(start)
+    {
+        //Move the ball
+    }
 
     glutPostRedisplay();
 }
@@ -106,9 +111,9 @@ void init()
     ai->SetDimension(32, 5);
     ai->SetPosition(0, 90, 0);
 
-    ball = new Rect();
+    ball = new Ball();
     ball->SetDimension(2,2);
-    //ball->SetPosition(0, 0, 0);
+    ball->SetSpeed(0.05);
 
     separator = new Line();
     separator->SetPosition(0,0,0);
