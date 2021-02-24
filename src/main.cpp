@@ -72,7 +72,7 @@ void idle()
             flag = false;
             printf("Lancio Palla!");
             int dim = ball->GetDimension(Rect::WIDTH);
-            ball->SetPosition(Utility::RandomInt(+90-(dim/2), -90+(dim/2)), 0, 0);
+            ball->SetPosition(Utility::RandomInt(-90+(dim/2), 90-(dim/2)), 0, 0);
             start = true;
         }
     }
