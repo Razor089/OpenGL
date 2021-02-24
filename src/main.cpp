@@ -107,7 +107,7 @@ void init()
     ai->SetPosition(0, 90, 0);
 
     ball = new Rect();
-    ball->SetDimension(5,5);
+    ball->SetDimension(2,2);
     //ball->SetPosition(0, 0, 0);
 
     separator = new Line();
@@ -131,7 +131,7 @@ void message()
 {
     Utility::printw(-90, 3, 0, "Player 1: %d", player_score);
     Utility::printw(55, 3, 0, "Player 2: %d", ia_score);
-    if(!flag)
+    if(!flag && !start)
     {
         Utility::printw(-30, 5, 0, "Press 'ENTER' to play");
     }
