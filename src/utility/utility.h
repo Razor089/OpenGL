@@ -24,6 +24,9 @@ class Utility
 
         /// Metodo che genera un numero intero casuale nell'intervallo [a,b]
         static int RandomInt(int a, int b);
+    
+        /// Metodo che genera un numero intero casuale
+        static int RandomInt();
 };
 
 #endif

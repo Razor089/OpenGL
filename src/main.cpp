@@ -3,6 +3,7 @@
 #include<GLUT/glut.h>
 #include<OpenGL/glu.h>
 #include<iostream>
+#include<math.h>
 #include"Rect.h"
 #include"Line.h"
 #include"Ball.h"
@@ -22,7 +23,8 @@ void message();
 
 //Objects
 
-Rect *player, *ai, *ball;
+Rect *player, *ai;
+Ball *ball;
 Line *separator;
 
 /// Game Variables
@@ -72,7 +74,17 @@ void idle()
         {
             flag = false;
             int dim = ball->GetDimension(Rect::WIDTH);
+            int dir = Utility::RandomInt()%2;
+            if(dir == 0)
+            {
+                 ball->SetSpeed(abs(ball->GetSpeed()));
+            }
+            else
+            {
+                 ball->SetSpeed(ball->GetSpeed()*-1);
+            }
             ball->SetPosition(Utility::RandomInt(-90+(dim/2), 90-(dim/2)), 0, 0);
+            ball->SetDirection(Utility::RandomInt(1,5));
             start = true;
         }
     }
@@ -81,7 +93,28 @@ void idle()
 
     if(start)
     {
-        //Move the ball
+        ball->Move(ball->GetDirection());
+    }
+
+    if(ball->GetPosition(Rect::X_AXIS)-ball->GetDimension(Rect::WIDTH) < -99 ||
+       ball->GetPosition(Rect::X_AXIS)+ball->GetDimension(Rect::WIDTH) > 99)
+    {
+        ball->ChangeDirection();
+    }
+
+    if(ball->GetPosition(Rect::Y_AXIS)-ball->GetDimension(Rect::HEIGHT) > 101)
+    {
+        player_score++;
+        start = false;
+        flag = false;
+        ball->SetPosition(0,0,0);     
+    }
+    else if(ball->GetPosition(Rect::Y_AXIS)+ball->GetDimension(Rect::HEIGHT) < -101)
+    {
+        ia_score++;
+        start = false;
+        flag = false;
+        ball->SetPosition(0,0,0);
     }
 
     glutPostRedisplay();
@@ -123,7 +156,7 @@ void init()
 /// Metodo che governa il ridimensionamento della finestra
 void reshape(int w, int h)
 {
-    glViewport(0, 0, (GLsizei)600, (GLsizei)600);
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluOrtho2D(-100, 100, -100, 100);
