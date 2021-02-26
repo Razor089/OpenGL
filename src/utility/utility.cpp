@@ -62,3 +62,9 @@ int Utility::RandomInt(int a, int b)
     }
     return (rand() % b) + a;
 }
+
+int Utility::RandomInt()
+{
+    srand(time(NULL));
+    return rand();
+}
