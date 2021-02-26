@@ -20,6 +20,9 @@ void keyboardUp(unsigned char key, int x, int y);
 void init();
 void idle();
 void message();
+void inizializzaPalla();
+void Collisions();
+void AiMove();
 
 //Objects
 
@@ -65,7 +68,7 @@ int main(int args, char** argv)
 void idle()
 {
     Utility::calcDeltaTime();
-    
+
     /// Quando premiamo ENTER parte il timer, passati i due secondi lancia la palla
     if(flag)
     {
@@ -73,56 +76,160 @@ void idle()
         if((time-oldTime)/2000 == 1)
         {
             flag = false;
-            int dim = ball->GetDimension(Rect::WIDTH);
-            int dir = Utility::RandomInt()%2;
-            if(dir == 0)
-            {
-                 ball->SetSpeed(abs(ball->GetSpeed()));
-            }
-            else
-            {
-                 ball->SetSpeed(ball->GetSpeed()*-1);
-            }
-            ball->SetPosition(Utility::RandomInt(-90+(dim/2), 90-(dim/2)), 0, 0);
-            ball->SetDirection(Utility::RandomInt(1,5));
+            inizializzaPalla();
             start = true;
         }
     }
 
     player->Move(-99, 99, 0, 0, 0, 0);
+    AiMove();
 
     if(start)
     {
         ball->Move(ball->GetDirection());
     }
 
-    if(ball->GetPosition(Rect::X_AXIS)-ball->GetDimension(Rect::WIDTH) < -99 ||
-       ball->GetPosition(Rect::X_AXIS)+ball->GetDimension(Rect::WIDTH) > 99)
+    if(ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) < -99 ||
+       ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) > 99)
     {
         ball->ChangeDirection();
     }
 
-    if(ball->GetPosition(Rect::Y_AXIS)-ball->GetDimension(Rect::HEIGHT) > 101)
+    Collisions();
+
+    if(ball->GetPosition(Rect::Y_AXIS)-(ball->GetDimension(Rect::HEIGHT)/2) > 101)
     {
         player_score++;
         start = false;
         flag = false;
-        ball->SetPosition(0,0,0);     
+        ball->SetPosition(0,0,0);
+        ball->SetSpeed(0.08);
     }
-    else if(ball->GetPosition(Rect::Y_AXIS)+ball->GetDimension(Rect::HEIGHT) < -101)
+    else if(ball->GetPosition(Rect::Y_AXIS)+(ball->GetDimension(Rect::HEIGHT)/2) < -101)
     {
         ia_score++;
         start = false;
         flag = false;
         ball->SetPosition(0,0,0);
+        ball->SetSpeed(0.08);
     }
 
     glutPostRedisplay();
 }
 
+/// Metodo per muovere l'avversario
+void AiMove()
+{
+    if(ai->GetPosition(Rect::X_AXIS) < ball->GetPosition(Rect::X_AXIS))
+    {
+        ai->RIGHT = true;
+        ai->LEFT = false;
+    }
+    else if(ai->GetPosition(Rect::X_AXIS) > ball->GetPosition(Rect::X_AXIS))
+    {
+        ai->RIGHT = false;
+        ai->LEFT = true;
+    }
+    ai->Move(-99, 99, 0, 0, 0, 0);
+}
+
+/// Metodo per il calcolo delle collisioni tra la palla e i giocatori
+void Collisions()
+{
+    /// Collisioni con il giocatore
+    if(ball->GetPosition(Rect::Y_AXIS)-(ball->GetDimension(Rect::HEIGHT)/2) <= player->GetPosition(Rect::Y_AXIS)+(player->GetDimension(Rect::HEIGHT)/2))
+    {
+        if(ball->GetPosition(Rect::Y_AXIS)+(ball->GetDimension(Rect::HEIGHT)/2) < player->GetPosition(Rect::Y_AXIS)-(player->GetDimension(Rect::HEIGHT)/2)) return;
+
+        if(ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= player->GetPosition(Rect::X_AXIS)-(player->GetDimension(Rect::WIDTH)/2) &&
+           ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= player->GetPosition(Rect::X_AXIS)+(player->GetDimension(Rect::WIDTH)/2))
+        {
+            if(ball->GetSpeed() > 0)
+            {
+                ball->SetSpeed(ball->GetSpeed()+0.01);
+            }
+            else
+            {
+                ball->SetSpeed(ball->GetSpeed()-0.01);
+            }
+            ball->SetSpeed(ball->GetSpeed() * -1);
+            if(ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= player->GetPosition(Rect::X_AXIS)-2 &&
+               ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= player->GetPosition(Rect::X_AXIS)+2)
+            {
+                ball->SetDirection(3);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= player->GetPosition(Rect::X_AXIS)-(player->GetDimension(Rect::WIDTH)/2)) &&
+                    (ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) < player->GetPosition(Rect::X_AXIS)-(player->GetDimension(Rect::WIDTH)/2)+4))
+            {
+                ball->SetDirection(1);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= player->GetPosition(Rect::X_AXIS)+(player->GetDimension(Rect::WIDTH)/2)) &&
+                    (ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) > player->GetPosition(Rect::X_AXIS)+(player->GetDimension(Rect::WIDTH)/2)-4))
+            {
+                ball->SetDirection(5);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= player->GetPosition(Rect::X_AXIS)-(player->GetDimension(Rect::WIDTH)/2)+4) &&
+                    (ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) < player->GetPosition(Rect::X_AXIS)-(player->GetDimension(Rect::WIDTH)/2)+10))
+            {
+                ball->SetDirection(2);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= player->GetPosition(Rect::X_AXIS)+(player->GetDimension(Rect::WIDTH)/2)-4) &&
+                    (ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) > player->GetPosition(Rect::X_AXIS)+(player->GetDimension(Rect::WIDTH)/2)-10))
+            {
+                ball->SetDirection(4);
+            }
+        }
+    }
+
+    /// Collisioni con l'avversario
+    if(ball->GetPosition(Rect::Y_AXIS)+(ball->GetDimension(Rect::HEIGHT)/2) >= ai->GetPosition(Rect::Y_AXIS)-(ai->GetDimension(Rect::HEIGHT)/2))
+    {
+        if(ball->GetPosition(Rect::Y_AXIS)-(ball->GetDimension(Rect::HEIGHT)/2) > ai->GetPosition(Rect::Y_AXIS)+(ai->GetDimension(Rect::HEIGHT)/2)) return;
+
+        if(ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= ai->GetPosition(Rect::X_AXIS)-(ai->GetDimension(Rect::WIDTH)/2) &&
+           ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= ai->GetPosition(Rect::X_AXIS)+(ai->GetDimension(Rect::WIDTH)/2))
+        {
+            if(ball->GetSpeed() > 0)
+            {
+                ball->SetSpeed(ball->GetSpeed()+0.01);
+            }
+            else
+            {
+                ball->SetSpeed(ball->GetSpeed()-0.01);
+            }
+            ball->SetSpeed(ball->GetSpeed() * -1);
+            if(ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= ai->GetPosition(Rect::X_AXIS)-2 &&
+               ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= ai->GetPosition(Rect::X_AXIS)+2)
+            {
+                ball->SetDirection(3);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= ai->GetPosition(Rect::X_AXIS)-(ai->GetDimension(Rect::WIDTH)/2)) &&
+                    (ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) < ai->GetPosition(Rect::X_AXIS)-(ai->GetDimension(Rect::WIDTH)/2)+4))
+            {
+                ball->SetDirection(5);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= ai->GetPosition(Rect::X_AXIS)+(ai->GetDimension(Rect::WIDTH)/2)) &&
+                    (ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) > ai->GetPosition(Rect::X_AXIS)+(ai->GetDimension(Rect::WIDTH)/2)-4))
+            {
+                ball->SetDirection(1);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) >= ai->GetPosition(Rect::X_AXIS)-(ai->GetDimension(Rect::WIDTH)/2)+4) &&
+                    (ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) < ai->GetPosition(Rect::X_AXIS)-(ai->GetDimension(Rect::WIDTH)/2)+10))
+            {
+                ball->SetDirection(4);
+            }
+            else if((ball->GetPosition(Rect::X_AXIS)-(ball->GetDimension(Rect::WIDTH)/2) <= ai->GetPosition(Rect::X_AXIS)+(ai->GetDimension(Rect::WIDTH)/2)-4) &&
+                    (ball->GetPosition(Rect::X_AXIS)+(ball->GetDimension(Rect::WIDTH)/2) > ai->GetPosition(Rect::X_AXIS)+(ai->GetDimension(Rect::WIDTH)/2)-10))
+            {
+                ball->SetDirection(2);
+            }
+        }
+    }
+}
+
 /// Inizializzazione delle variabili e dello stato di OpenGL
 void init()
-{   
+{
     glClearColor(0.0, 0.0, 0.0, 1.0);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -143,6 +250,7 @@ void init()
     ai = new Rect();
     ai->SetDimension(32, 5);
     ai->SetPosition(0, 90, 0);
+    ai->SetSpeed(0.08);
 
     ball = new Ball();
     ball->SetDimension(2,2);
@@ -185,7 +293,7 @@ void display()
     separator->Draw();
     ai->Draw();
     player->Draw();
-    
+
     if(start)
     {
         ball->Draw();
@@ -228,4 +336,21 @@ void keyboardUp(unsigned char key, int x, int y)
         default:
             break;
     }
+}
+
+/// Metodo che inizializza la palla
+void inizializzaPalla()
+{
+  int dim = ball->GetDimension(Rect::WIDTH);
+  int dir = Utility::RandomInt()%2;
+  if(dir == 0)
+  {
+       ball->SetSpeed(abs(ball->GetSpeed()));
+  }
+  else
+  {
+       ball->SetSpeed(ball->GetSpeed()*-1);
+  }
+  ball->SetPosition(Utility::RandomInt(-90+(dim/2), 90-(dim/2)), 0, 0);
+  ball->SetDirection(Utility::RandomInt(1,5));
 }
